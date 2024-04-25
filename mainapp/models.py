@@ -30,3 +30,14 @@ class AppliedJob(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # ForeignKey to link to a user
     file = models.FileField(upload_to='uploads/')
     
+
+from django.db import models
+
+# Create your models here.
+class JobOpening(models.Model):
+    company_name = models.CharField(max_length=255)
+    job_title = models.CharField(max_length=255)
+    job_description = models.TextField()
+    salary = models.CharField(max_length=100)
+    location = models.CharField(max_length=255)
+    deadline_date = models.DateField()

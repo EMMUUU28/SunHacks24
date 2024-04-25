@@ -9,7 +9,7 @@ def index(request):
     return render(request,"test.html")
 
 def applicants(request):
-    
+
     user = request.user
     applied_jobs = AppliedJob.objects.filter(user=user)
 
@@ -102,3 +102,41 @@ def addskills(request):
         # Do something with the form data, such as saving to a database
         return render(request,'user/apply.html')
     return render(request,'user/apply.html')
+
+from .models import *
+
+def addJob(request):
+    if request.method == 'POST':
+        company_name = request.POST.get('cname')
+        job_title = request.POST.get('jname')
+        job_description = request.POST.get('jd')
+        salary = request.POST.get('salary')
+        location = request.POST.get('location')
+        deadline_date = request.POST.get('dedline')
+
+        # Print the form data to the console
+        print(f"formData: {{ company_name: '{company_name}', job_title: '{job_title}', job_description: '{job_description}', salary: '{salary}', location: '{location}', deadline_date: '{deadline_date}' }}")
+        
+        
+        job_opening = JobOpening(
+            company_name=company_name,
+            job_title=job_title,
+            job_description=job_description,
+            salary=salary,
+            location=location,
+            deadline_date=deadline_date
+        )
+        job_opening.save()
+
+        # You can optionally process the form data here (e.g., save it to a database)
+
+        # Return a success response (optional)
+        return render(request, 'hr/addJob.html')  # Replace with your success template name
+    else:
+        return render(request, 'hr/addJob.html')
+    
+
+def listjob(request):
+    job_openings = JobOpening.objects.all()  # Fetch all job openings from the database
+    context = {'job_openings': job_openings}
+    return render(request, 'hr/listjob.html', context)

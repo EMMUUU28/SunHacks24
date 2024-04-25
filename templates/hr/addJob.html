@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+    <div class="container-fluid">
+          <div class="col-xl-9 col-lg-8">
+                <div class="card">
+                   <div class="card-header d-flex justify-content-between">
+                      <div class="header-title">
+                         <h4 class="card-title">New Job Description</h4>
+                      </div>
+                   </div>
+                   <div class="card-body">
+                      <div class="new-user-info">
+                         <form method="post">
+                          {% csrf_token %}
+                            <div class="row">
+                               <div class="form-group col-md-6">
+                                  <label for="fname">Company Name:</label>
+                                  <input type="text" class="form-control" name="cname" id="cname" placeholder="Company Name">
+                               </div>
+                               <div class="form-group col-md-6">
+                                  <label for="fname">Job Title/Position:</label>
+                                  <input type="text" class="form-control" name="jname" id="jname" placeholder="Job Title">
+                               </div>
+                               <!-- <div class="form-group col-md-6">
+                                  <label for="lname">Last Name:</label>
+                                  <input type="text" class="form-control" id="lname" placeholder="Last Name">
+                               </div> -->
+                               <div class="form-group col-md-12">
+                                  <label for="add1">Job Description</label>
+                                  <textarea class="form-control" name="jd" id="jd" rows="3"></textarea>
+                               </div>
+                               <!-- <div class="form-group col-md-6">
+                                  <label for="add2">Street Address 2:</label>
+                                  <input type="text" class="form-control" id="add2" placeholder="Street Address 2">
+                               </div> -->
+                               <div class="form-group col-md-6">
+                                  <label for="cname">Salary:</label>
+                                  <input type="text" class="form-control" name="salary" id="salary" placeholder="Salary">
+                               </div>
+                               <!-- <div class="form-group col-md-6">
+                                  <label>Country:</label>
+                                  <select class="form-control" id="selectcountry">
+                                     <option>Select Country</option>
+                                     <option>Canada</option>
+                                     <option>UK</option>
+                                     <option >USA</option>
+                                     <option>India</option>
+                                     <option>Africa</option>
+                                  </select>
+                               </div> -->
+                               <div class="form-group col-md-6">
+                                  <label for="mobno">Location:</label>
+                                  <input type="text" class="form-control" name="location" id="location" placeholder="Location">
+                               </div>
+                               <div class="form-group col-md-6">
+                                  <label for="altconno">Deadline Date:</label>
+                                  <input type="date" class="form-control" id="dedline" name="dedline" placeholder="Deadline Date">
+                               </div>
+                               <div class="form-group col-md-12 mt-4">
+                                  <button type="submit" class="btn btn-primary">Create Job Opening</button>
+                               </div>
+                         </form>
+                      </div>
+                   </div>
+                </div>
+          </div>
+    </div>
+   
+{% endblock content %}
