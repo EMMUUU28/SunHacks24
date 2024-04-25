@@ -36,4 +36,6 @@ def adduser(request):
         return render(request, 'app/add-job.html')
     # Handle GET requests (render the form template)
 def jobs (request):
-    return render(request, 'backend/ui-cards.html')
+    job_openings = JobOpening.objects.all()  # Fetch all job openings from the database
+    context = {'job_openings': job_openings}
+    return render(request, 'backend/jobs.html', context)
