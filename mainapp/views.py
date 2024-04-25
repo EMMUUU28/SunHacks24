@@ -8,6 +8,13 @@ from .models import AppliedJob
 def index(request):
     return render(request,"test.html")
 
+def applicants(request):
+    
+    user = request.user
+    applied_jobs = AppliedJob.objects.filter(user=user)
+
+    return render(request, "hr/applicants.html", {'applied_jobs': applied_jobs})
+
 def applyjob(request):
     user = request.user
     if request.method == 'POST' and request.FILES['pdf_files']:
