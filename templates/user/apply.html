@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %} 
+    Talk with PDF
+{% endblock title %}
+
+{% block content %}
+
+<h1 class="  pt-4">Apply For Job </h1>
+<br>
+<div class=" " id="container">
+    <h3 class=" pb-4">Add Resume </h3>
+  
+    <form method="post" action="{% url 'applyjob' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+       
+    
+      
+
+
+          <div class="input-group">
+            <input type="file" name="pdf_files" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+          </div>
+          <br>
+          <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Apply</button>
+          </div>
+          
+        </form>
+          <br>
+
+    <div class="card mb-4">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">Work Experience</h5>
+      </div>
+      <div class="card-body">
+        <form action="{% url 'addworkexp' %}" method="post">
+          {% csrf_token %}
+          
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="company">Company</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-buildings"></i></span>
+                <input type="text" id="company" name="company" class="form-control" placeholder="ACME Inc." aria-describedby="basic-icon-default-company2" />
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="position">Position</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                <input type="text" id="position" name="position" class="form-control" placeholder="Software Developer, etc." aria-describedby="basic-icon-default-email2" />
+              </div>
+              <div class="form-text">You can use letters, numbers & periods</div>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="start_date" class="col-md-2 col-form-label">Start Date</label>
+            <div class="col-md-10">
+              <input type="date" id="start_date" name="start_date" class="form-control" value="" />
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="end_date" class="col-md-2 col-form-label">End Date</label>
+            <div class="col-md-10">
+              <input type="date" id="end_date" name="end_date" class="form-control" value="" />
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 form-label" for="brief">Brief</label>
+            <div class="col-sm-10">
+              <textarea id="brief" name="brief" class="form-control" placeholder="A short description about your company"></textarea>
+            </div>
+          </div>
+          <div class="row justify-content-end">
+            <div class="col-sm-10">
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </div>
+        </form>
+        
+      </div>
+    </div>
+ 
+
+
+
+
+<br>
+  
+    <div class="card mb-4">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">Education</h5>
+      </div>
+      <div class="card-body">
+        <form action="{% url 'addeducation' %}" method="post">
+          {% csrf_token %}
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="institution">Institution</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-institution2" class="input-group-text"><i class="bx bx-buildings"></i></span>
+                <input type="text" id="institution" name="institution" class="form-control" placeholder="College Name" aria-describedby="basic-icon-default-institution2" />
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="degree">Degree</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                <input type="text" id="degree" name="degree" class="form-control" placeholder="Course Name" aria-describedby="basic-icon-default-degree2" />
+              </div>
+              <div class="form-text">You can use letters, numbers & periods</div>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="start_date" class="col-md-2 col-form-label">Start Date</label>
+            <div class="col-md-10">
+              <input type="month" id="start_date" name="start_date" class="form-control" placeholder="Eg. 2021-06" />
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="end_date" class="col-md-2 col-form-label">End Date</label>
+            <div class="col-md-10">
+              <input type="month" id="end_date" name="end_date" class="form-control" placeholder="Eg. 2021-06" />
+            </div>
+          </div>
+          
+          <div class="row justify-content-end">
+            <div class="col-sm-10">
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+  
+
+
+<br>
+
+  
+    <div class="card mb-4">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">Skills</h5>
+      </div>
+      <div class="card-body">
+        <form action="{% url 'addskills' %}" method="post">
+          {% csrf_token %}
+          
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="skills">Known Skills</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-skills2" class="input-group-text"><i class="bx bx-buildings"></i></span>
+                <input type="text" id="skills" name="skills" class="form-control" placeholder="Python, JavaScript, etc." aria-describedby="basic-icon-default-skills2" />
+              </div>
+            </div>
+          </div>
+         
+          <div class="row justify-content-end">
+            <div class="col-sm-10">
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </div>
+        </form>
+        
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+        
+    
+</div>
+    {% if response_text %}
+        <div class="mt-4 p-4">
+            <h2>Response:</h2>
+            <p id="response-text" class="lead">{{ response_text|linebreaks }}</p>
+        </div>
+    {% endif %}
+    
+{% endblock %}
