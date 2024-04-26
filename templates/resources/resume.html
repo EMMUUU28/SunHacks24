@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %} 
+    Resume Assistant
+{% endblock title %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h1 class=" pt-4">Resume Building Assistant</h1>
+    <h3 class="mt-4">AI can significantly improve resumes by providing personalized feedback, optimizing content, and ensuring that resumes are tailored to specific job requirements. Here are some ways AI can help in improving resumes:</h3>
+    <br>
+    <div class="w-50" id="container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="">
+                <div class="mb-3">
+                    <label for="pdf_files" class="form-label">Upload Resume(s)</label>
+                    <input type="file" name="pdf_files" class="form-control" id="pdf_files" multiple required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="user_question" class="form-label">Ask Question</label>
+                    <textarea class="form-control" name="user_question" id="user_question" placeholder="Doubts"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-outline-primary" type="submit" id="submit_btn">Ask</button>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+    
+    {% if response_text %}
+    <div class="mt-4 p-4">
+        <h2>Response:</h2>
+        <p id="response-text" class="lead">{{ response_text|linebreaks }}</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock content %}

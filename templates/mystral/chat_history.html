@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Multi-PDF ChatBot using Mistral-7B-Instruct :books:</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="files">Upload files</label>
+            <input type="file" class="form-control-file" name="files" multiple>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group mt-3">
+            <label for="question">Question</label>
+            <input type="text" class="form-control" name="question" placeholder="Ask about your PDF">
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+
+    <div class="chat-history mt-4">
+        {% for chat in chat_history %}
+            <div class="user-message alert alert-primary mt-2">{{ chat.question }}</div>
+            <div class="bot-message alert alert-secondary mt-2">{{ chat.answer }}</div>
+        {% empty %}
+            <p>No chat history yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

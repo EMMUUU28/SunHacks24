@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User  # Import the User model from Django's built-in authentication system
 
 
+
 # Create your models here.
 class Education(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # ForeignKey to link to a user
@@ -18,6 +19,7 @@ class WorkExperience(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     description = models.TextField()
+    social = models.TextField(null=True)
     # Add more fields as needed for work experience
 
 class Skill(models.Model):
@@ -35,6 +37,7 @@ class JobOpening(models.Model):
     salary = models.CharField(max_length=100)
     location = models.CharField(max_length=255)
     deadline_date = models.DateField()
+    max_intake = models.CharField(max_length=10,null=True)
 
 
 class AppliedJob(models.Model):

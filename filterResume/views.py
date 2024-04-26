@@ -17,7 +17,8 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from dotenv import load_dotenv
-
+from .models import *
+from mainapp.models import JobOpening,AppliedJob
 load_dotenv()
 genai.configure(api_key=(os.getenv("GOOGLE_API_KEY")))
 # def filtering(request):
@@ -50,7 +51,7 @@ def get_pdf_text(pdf_docs):
 def get_conversational_chain():
 
     prompt_template = """
-    You are a Resume Builder tool, scrape the whole resume and grade the resume out of 100. Mention the Job Description for which the resume is most suitable for as "Job Description:" . Answer the question asked by the users. Dont use bold texts in your answer \n\n
+    You are a Resume Builder tool, scrape the whole resume and grade the resume out of 100. Mention the Job Description for which the resume is most suitable for as "Job Description:" . Answer the question asked by the users. Dont use bold texts in your answer. Mention the Errors in the Resume and provide the the correction  \n\n
     Resume:\n {context}?\n
     Question: \n{question}\n
 
@@ -108,9 +109,6 @@ def resumeassistant(request):
     return render(request,'resources/resume.html')
 
 
-
-
-
 def filtering(request):
 
     url = f'''https://emmubucket.s3.ap-south-1.amazonaws.com/resumes/Black+and+White+Simple+Business+School+Graduate+Corporate+Resume.pdf
@@ -119,7 +117,11 @@ def filtering(request):
 
             https://emmubucket.s3.ap-south-1.amazonaws.com/resumes/resume_ryan_dmello_2024_updated.pdf
 
-            https://emmubucket.s3.ap-south-1.amazonaws.com/resumes/SohamK_resume2024_2nH9kAj.pdf'''
+            https://emmubucket.s3.ap-south-1.amazonaws.com/resumes/SohamK_resume2024_2nH9kAj.pdf 
+            
+            https://emmubucket.s3.ap-south-1.amazonaws.com/Xircls/Emmanuel+Resume+JULY2023++(1).pdf
+            
+            https://emmubucket.s3.ap-south-1.amazonaws.com/Xircls/Aston_Resume_.pdf'''
     
     jd = '''Selected Intern's Day-to-day Responsibilities Include
 
@@ -194,3 +196,109 @@ WordPress, Bootstrap, Email Marketing, HTML&CSS
     
     return render(request, 'gemini/filter.html', {'url' : url,'result':result})
 
+
+
+def filterlist(request):
+    company_names = JobOpening.objects.values_list('company_name', flat=True)
+    if request.POST:
+            selected_company = request.POST.get('company_name')
+            company = JobOpening.objects.filter(company_name=selected_company).first()
+            print(selected_company)
+            users_applied = company.appliedjob_set.all()
+            print(users_applied)
+            user = request.user
+            applied_jobs = AppliedJob.objects.filter(user=user)
+
+            return render(request, "gemini/list.html", {"company":company_names,"appliedUsers":users_applied})
+    return render(request, "gemini/list.html", {"company":company_names})
+
+
+############################Mystral7B###################################
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import ChatHistory
+from langchain.chains import ConversationalRetrievalChain
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.llms import LlamaCpp
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import FAISS
+from langchain.memory import ConversationBufferMemory
+from langchain.document_loaders import PyPDFLoader
+import os
+import tempfile
+
+def initialize_session_state(request):
+    history = ChatHistory.objects.filter(user=request.user)
+    past = [chat.question for chat in history]
+    generated = [chat.answer for chat in history]
+    return past, generated
+
+def conversation_chat(request, query, chain):
+    history = ChatHistory.objects.filter(user=request.user)
+    result = chain({"question": query, "chat_history": history})
+    ChatHistory.objects.create(user=request.user, question=query, answer=result["answer"])
+    return result["answer"]
+
+def create_conversational_chain(vector_store):
+    # Create llm
+    llm = LlamaCpp(
+    streaming = True,
+    model_path="mistral-7b-instruct-v0.1.Q4_K_M.gguf",
+    temperature=0.75,
+    top_p=1,
+    verbose=True,
+    n_ctx=4096
+)
+
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
+    chain = ConversationalRetrievalChain.from_llm(llm=llm, chain_type='stuff',
+                                                 retriever=vector_store.as_retriever(search_kwargs={"k": 2}),
+                                                 memory=memory)
+    return chain
+
+def main(request):
+    if request.method == 'POST':
+        uploaded_files = request.FILES.getlist('files')
+        if uploaded_files:
+            text = []
+            for file in uploaded_files:
+                file_extension = os.path.splitext(file.name)[1]
+                with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                    temp_file.write(file.read())
+                    temp_file_path = temp_file.name
+
+                loader = None
+                if file_extension == ".pdf":
+                    loader = PyPDFLoader(temp_file_path)
+
+                if loader:
+                    text.extend(loader.load())
+                    os.remove(temp_file_path)
+
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=20)
+            text_chunks = text_splitter.split_documents(text)
+
+            # Create embeddings
+            embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", 
+                                               model_kwargs={'device': 'cpu'})
+
+            # Create vector store
+            vector_store = FAISS.from_documents(text_chunks, embedding=embeddings)
+
+            # Create the chain object
+            chain = create_conversational_chain(vector_store)
+
+            query = request.POST.get('question')
+            output = conversation_chat(request, query, chain)
+
+            past, generated = initialize_session_state(request)
+            chat_history = [{'question': question, 'answer': answer} for question, answer in zip(past, generated)]
+            context = {'chat_history': chat_history}
+            return render(request, 'chat_history.html', context)
+
+    else:
+        past, generated = initialize_session_state(request)
+        context = {'past': past, 'generated': generated}
+        return render(request, 'mystral/chat_history.html', context)

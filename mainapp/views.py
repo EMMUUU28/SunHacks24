@@ -4,13 +4,17 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 # Create your views here.
 from .models import AppliedJob,JobOpening
+from authApp.models import *
 from django.contrib.auth.models import User
 
 def index(request):
     return render(request,"test.html")
 
 def home(request):
-    return render(request,"profile/profile.html")
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
+    role=profile.role
+    return render(request,"profile/profile.html",{"role":role})
 
 def applicants(request):
 
@@ -56,6 +60,7 @@ def addworkexp(request):
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         brief = request.POST.get('brief')
+        social = request.POST.get('social')
         
         # Print form data
         print(f"Company: {company}")
@@ -63,6 +68,7 @@ def addworkexp(request):
         print(f"Start Date: {start_date}")
         print(f"End Date: {end_date}")
         print(f"Brief: {brief}")
+        print(f"Social: {social}")
         user = request.user
 
         WorkExperience.objects.create(
@@ -72,6 +78,7 @@ def addworkexp(request):
             start_date=start_date,
             end_date=end_date,
             description=brief,
+            social = social
         )
         
         # Do something with the form data, such as saving to a database
@@ -141,6 +148,8 @@ def addJob(request):
         salary = request.POST.get('salary')
         location = request.POST.get('location')
         deadline_date = request.POST.get('dedline')
+        max_intake = request.POST.get('intakes')
+
 
         # Print the form data to the console
         print(f"formData: {{ company_name: '{company_name}', job_title: '{job_title}', job_description: '{job_description}', salary: '{salary}', location: '{location}', deadline_date: '{deadline_date}' }}")
@@ -152,7 +161,8 @@ def addJob(request):
             job_description=job_description,
             salary=salary,
             location=location,
-            deadline_date=deadline_date
+            deadline_date=deadline_date,
+            max_intake = max_intake
         )
         job_opening.save()
 
