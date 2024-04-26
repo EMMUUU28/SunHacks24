@@ -10,11 +10,20 @@
 <div class=" " id="container">
     <h3 class=" pb-4">Add Resume </h3>
   
+    
+    
     <form method="post" action="{% url 'applyjob' %}" enctype="multipart/form-data">
         {% csrf_token %}
        
     
-      
+        <div class="form-group">
+          <label for="company_name">Company Name:</label>
+          <select class="form-control w-50" name="company_name" id="company_name">
+            {% for company_name in jobs %}
+              <option value="{{ company_name }}">{{ company_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
 
 
           <div class="input-group">

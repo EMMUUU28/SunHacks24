@@ -117,8 +117,11 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'login'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "867759492392-6kmapsdic2kmd987j8cbi710u8btk0mf.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "867759492392-6kmapsdic2kmd987j8cbi710u8btk0mf.apps.googleusercontent.com"
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "72785714103-let02h06qhokc57no79pjbhhcuii1vfj.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 

@@ -129,7 +129,10 @@ def filtering(request):
 
 About Company: We assist companies to manage their work in a process-oriented and cost-effective way and measure everything with reports & analytics. We help companies with traditional pain points, including operations and execution. While working behind the desk, we help clients to save on the operational costs to up to 70% and reduce the time put in operational stuff by 50% so that they can focus on what they do best which is core business. And We Support aims at standardizing corporate services at fixed prices globally with the best available quality and in turn, creating value for businesses by providing significant competitive advantages.
 Desired Skills and Experience
-WordPress, Bootstrap, Email Marketing, HTML&CSS'''
+WordPress, Bootstrap, Email Marketing, HTML&CSS
+'''
+
+    type="Hybrid"
 
       
     genai.configure(api_key=(os.getenv("GOOGLE_API_KEY")))  # Set up your API key
@@ -170,11 +173,24 @@ WordPress, Bootstrap, Email Marketing, HTML&CSS'''
     Offer a percentage matching score, list of missing keywords, and a brief profile summary. Scan all the pdfs and give saparate output for each resume. 
     Resume: {url }
     Job Description: {jd}
+    Type of Work : {type}
+    Mention the Type of work in the Type Field in the Json Response.
+    If the resume has any special research or National achievements (if Any) add it in the achievements field. Leave empty if there is No such achievements.
+    Give Rssult in this format :
 
-    Respond in a JSON-like structure with these keys:
-    {{"JD Match": "", "Missing Keywords": [], "Profile Summary": ""}}
+    ---------------------------------------------------------------------
+    Resume Number 
+    Job Description Match : 
+    Missing Keywords: []
+    Profile Summary: 
+    Achievements:  
+    Type: 
+    ---------------------------------------------------------------------
+    Strictly Follow This format
     """
     convo.send_message(f"{context} Link:{url}, ")
     result = convo.last.text
+
+    
     return render(request, 'gemini/filter.html', {'url' : url,'result':result})
 

@@ -3,29 +3,52 @@ from .models import Education,WorkExperience,Skill
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 # Create your views here.
-from .models import AppliedJob
+from .models import AppliedJob,JobOpening
+from django.contrib.auth.models import User
 
 def index(request):
     return render(request,"test.html")
 
+def home(request):
+    return render(request,"profile/profile.html")
+
 def applicants(request):
 
-    user = request.user
-    applied_jobs = AppliedJob.objects.filter(user=user)
+    company_names = JobOpening.objects.values_list('company_name', flat=True)
+    if request.POST:
+            selected_company = request.POST.get('company_name')
+            company = JobOpening.objects.filter(company_name=selected_company).first()
+            print(selected_company)
+            users_applied = company.appliedjob_set.all()
+            print(users_applied)
+            user = request.user
+            applied_jobs = AppliedJob.objects.filter(user=user)
 
-    return render(request, "hr/applicants.html", {'applied_jobs': applied_jobs})
+            return render(request, "hr/applicants.html", {"company":company_names,"appliedUsers":users_applied})
+    return render(request, "hr/applicants.html", {"company":company_names})
+
 
 def applyjob(request):
     user = request.user
+    company_names = JobOpening.objects.values_list('company_name', flat=True)
+    selected_company = request.POST.get('company_name')
+    # request.session['selected_company'] = selected_company
+
     if request.method == 'POST' and request.FILES['pdf_files']:
         uploaded_file = request.FILES['pdf_files']
-        file_instance = AppliedJob(user=user,file=uploaded_file)
+        selectedCompany = JobOpening.objects.get(company_name=selected_company)
+
+        file_instance = AppliedJob(user=user,file=uploaded_file,company=selectedCompany)
         file_instance.save()
         return render(request, "user/apply.html")
-    return render(request,"user/apply.html")
+    return render(request,"user/apply.html",{"jobs":company_names})
+
+
 
 
 def addworkexp(request):
+    company_names = JobOpening.objects.values_list('company_name', flat=True)
+
     if request.method == 'POST':
         
         company = request.POST.get('company')
@@ -52,11 +75,13 @@ def addworkexp(request):
         )
         
         # Do something with the form data, such as saving to a database
-        return render(request,'user/apply.html')
-    return render(request,'user/apply.html')
+        return render(request,'user/apply.html',{"jobs":company_names})
+    return render(request,'user/apply.html',{"jobs":company_names})
 
 # @login_required
 def addeducation(request):
+    company_names = JobOpening.objects.values_list('company_name', flat=True)
+
     if request.method == 'POST':
         institution = request.POST.get('institution')
         degree = request.POST.get('degree')
@@ -79,11 +104,14 @@ def addeducation(request):
         )
         
         # Do something with the form data, such as saving to a database
-        return render(request,'user/apply.html')
-    return render(request,'user/apply.html')
+        return render(request,'user/apply.html',{"jobs":company_names})
+    return render(request,'user/apply.html',{"jobs":company_names})
 
 # @login_required
 def addskills(request):
+
+    company_names = JobOpening.objects.values_list('company_name', flat=True)
+
     if request.method == 'POST':
         user = request.user
 
@@ -100,8 +128,8 @@ def addskills(request):
 
         
         # Do something with the form data, such as saving to a database
-        return render(request,'user/apply.html')
-    return render(request,'user/apply.html')
+        return render(request,'user/apply.html',{"jobs":company_names})
+    return render(request,'user/apply.html',{"jobs":company_names})
 
 from .models import *
 
@@ -140,3 +168,20 @@ def listjob(request):
     job_openings = JobOpening.objects.all()  # Fetch all job openings from the database
     context = {'job_openings': job_openings}
     return render(request, 'hr/listjob.html', context)
+
+
+
+def profile(request):
+    user = request.user
+    education = Education.objects.filter(user=user)
+    workexp = WorkExperience.objects.filter(user=user)
+    skill_info = Skill.objects.filter(user=user)
+    print(education)
+    print(workexp)
+    print(skill_info)
+    params = {
+        'education':education,
+        'workexp':workexp,
+        'skill':skill_info
+    } 
+    return render(request,'profile/profile.html', params)

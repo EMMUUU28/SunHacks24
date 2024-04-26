@@ -4,6 +4,20 @@
 <h1>Applied Jobs</h1>
  
 <br>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="company_name">Company Name:</label>
+      <select class="form-control" name="company_name" id="company_name">
+        {% for company_name in company %}
+          <option value="{{ company_name }}">{{ company_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+<br>
     <div class="card card-block card-stretch card-height files-table">                   
         <div class="card-header d-flex justify-content-between">
             <div class="header-title">
@@ -24,8 +38,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for applied_job in applied_jobs %}
-
+                    {% for applied_job in appliedUsers %}
+                        
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
