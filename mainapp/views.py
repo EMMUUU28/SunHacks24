@@ -18,7 +18,7 @@ def home(request):
     
     # print(profile.role)
     # role=profile.role
-    return render(request,"auth/login.html")
+    return render(request,"home.html")
 
 
 @login_required
