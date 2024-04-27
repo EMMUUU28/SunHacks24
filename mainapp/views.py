@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import Education,WorkExperience,Skill
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -10,15 +10,15 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    return render(request,"home.html")
+    return redirect("/user_login")
 
-def home(request):
-    # user = request.user
-    # profile = UserProfile.objects.get(user=user)
+# def home(request):
+#     # user = request.user
+#     # profile = UserProfile.objects.get(user=user)
     
-    # print(profile.role)
-    # role=profile.role
-    return render(request,"home.html")
+#     # print(profile.role)
+#     # role=profile.role
+#     return render(request,"home.html")
 
 
 @login_required
@@ -201,3 +201,8 @@ def profile(request):
         'skill':skill_info
     } 
     return render(request,'profile/profile.html', params)
+
+def calendar(request):
+    return render(request,"calendar.html")
+    
+    

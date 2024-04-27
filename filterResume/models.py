@@ -10,3 +10,8 @@ class ChatHistory(models.Model):
 
     def __str__(self):
         return f'{self.user.username}: {self.question[:20]}'
+    
+
+class Jobinfo(models.Model):
+    job_description=models.TextField()
+    type=models.TextField()

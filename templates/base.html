@@ -1,6 +1,9 @@
 {% load static %}
+
 <!doctype html>
 <html lang="en">
+    
+    
   <head>
     <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -30,7 +33,9 @@
         <!--Image viewer-->
         <link rel="stylesheet" href="{% static "assets/vendor/doc-viewer/include/verySimpleImageViewer/css/jquery.verySimpleImageViewer.css" %}">
         <!--officeToHtml-->
-        <link rel="stylesheet" href="{% static "assets/vendor/doc-viewer/include/officeToHtml/officeToHtml.css" %}">  </head>
+        <link rel="stylesheet" href="{% static "assets/vendor/doc-viewer/include/officeToHtml/officeToHtml.css" %}">  
+      
+    </head>
   <body class="  ">
     <!-- loader Start -->
     <div id="loading">
@@ -110,13 +115,13 @@
                     </ul>
                  </li>
                  {% endif %}
-                 <li class=" ">
+                 <!-- <li class=" ">
                     <a href="/skillgap-analysis" class="">
                         <i class="lar la-star"></i><span>Interview Bit</span>
                     </a>
                 <ul id="page-fevourite" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                 </ul>
-             </li>
+             </li> -->
              <li class=" ">
                 <a href="/listjob" class="">
                     <i class="lar la-file-alt iq-arrow-left"></i><span>Job List</span>
@@ -301,5 +306,25 @@
             </div>
         </div>
     </div>
+    
+
+
+
+    <script src="{% static "calandar/assets/js/backend-bundle.min.js" %}"></script>
+    
+    <!-- Chart Custom JavaScript -->
+    <script src="{% static "calandar/assets/js/customizer.js" %}"></script>
+    
+    <!-- Fullcalender Javascript -->
+    <script src='{% static "/calandar/assets/vendor/fullcalandar/core/main.js" %}'></script>
+    <script src='{% static "/calandar/assets/vendor/fullcalandar/daygrid/main.js" %}'></script>
+    <script src='{% static "/calandar/assets/vendor/fullcalandar/timegrid/main.js" %}'></script>
+    <script src='{% static "/calandar/assets/vendor/fullcalandar/list/main.js" %}'></script>
+    <script src='{% static "/calandar/assets/vendor/fullcalandar/interaction/main.js" %}'></script>
+    
+    <!-- app JavaScript -->
+    <script src="{% static "calandar/assets/js/app.js" %}"></script>  </body>
+
+
   </body>
 </html>

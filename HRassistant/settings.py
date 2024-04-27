@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'filterResume',
     'authApp',
     'social_django',
+
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,42 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static/js', 'serviceworker.js')
+
+# PWA_APP_NAME = 'LevelOne'
+# PWA_APP_DESCRIPTION = "LevelOne PWA"
+# PWA_APP_THEME_COLOR = '#000000'
+# PWA_APP_BACKGROUND_COLOR = '#ffffff'
+# PWA_APP_DISPLAY = 'standalone'
+# PWA_APP_SCOPE = '/'
+# PWA_APP_ORIENTATION = 'any'
+# PWA_APP_START_URL = '/'
+# PWA_APP_STATUS_BAR_COLOR = 'default'
+# PWA_APP_ICONS = [
+#     {
+#         'src': 'static/images/icon-160x160.png',
+#         'sizes': '160x160'
+#     }
+# ]
+# PWA_APP_ICONS_APPLE = [
+#     {
+#         'src': 'static/assets/images/logo.png',
+#         'sizes': '160x160'
+#     }
+# ]
+# PWA_APP_SPLASH_SCREEN = [
+#     {
+#         'src': 'static/images/icon.png',
+#         'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+#     }
+# ]
+# PWA_APP_DIR = 'ltr'
+# PWA_APP_LANG = 'en-US'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'crce.9598.ce@gmail.com'
+EMAIL_HOST_PASSWORD = 'krbp mnzt dxkb nxal'

@@ -91,7 +91,6 @@ def replace_newlines(text):
 from django.contrib.auth.decorators import login_required
 
 
-    
 @login_required
 def resumeassistant(request):
     if request.method == 'POST' and request.FILES.get('pdf_files'):
@@ -111,6 +110,9 @@ def resumeassistant(request):
 @login_required
 def filtering(request):
 
+    job = Jobinfo.objects.all().first()
+    print(job.job_description)
+    print(job.type)
     url = f'''https://emmubucket.s3.ap-south-1.amazonaws.com/resumes/Black+and+White+Simple+Business+School+Graduate+Corporate+Resume.pdf
 
             https://emmubucket.s3.ap-south-1.amazonaws.com/resumes/resume+janice+dcruz+(1).pdf
@@ -123,18 +125,18 @@ def filtering(request):
             
             https://emmubucket.s3.ap-south-1.amazonaws.com/Xircls/Aston_Resume_.pdf'''
     
-    jd = '''Selected Intern's Day-to-day Responsibilities Include
+    # jd = '''Selected Intern's Day-to-day Responsibilities Include
 
- Should have good knowledge of WordPress
- Should have good knowledge of Email design
- Should be able to communicate with team
+    #         Should have good knowledge of WordPress
+    #         Should have good knowledge of Email design
+    #         Should be able to communicate with team
 
-About Company: We assist companies to manage their work in a process-oriented and cost-effective way and measure everything with reports & analytics. We help companies with traditional pain points, including operations and execution. While working behind the desk, we help clients to save on the operational costs to up to 70% and reduce the time put in operational stuff by 50% so that they can focus on what they do best which is core business. And We Support aims at standardizing corporate services at fixed prices globally with the best available quality and in turn, creating value for businesses by providing significant competitive advantages.
-Desired Skills and Experience
-WordPress, Bootstrap, Email Marketing, HTML&CSS
-'''
+    #         About Company: We assist companies to manage their work in a process-oriented and cost-effective way and measure everything with reports & analytics. We help companies with traditional pain points, including operations and execution. While working behind the desk, we help clients to save on the operational costs to up to 70% and reduce the time put in operational stuff by 50% so that they can focus on what they do best which is core business. And We Support aims at standardizing corporate services at fixed prices globally with the best available quality and in turn, creating value for businesses by providing significant competitive advantages.
+    #         Desired Skills and Experience
+    #         WordPress, Bootstrap, Email Marketing, HTML&CSS
+    #         '''
 
-    type="Hybrid"
+    # type="Hybrid"
 
       
     genai.configure(api_key=(os.getenv("GOOGLE_API_KEY")))  # Set up your API key
@@ -174,28 +176,36 @@ WordPress, Bootstrap, Email Marketing, HTML&CSS
     Evaluate the given resume against the provided job description.
     Offer a percentage matching score, list of missing keywords, and a brief profile summary. Scan all the pdfs and give saparate output for each resume. 
     Resume: {url }
-    Job Description: {jd}
-    Type of Work : {type}
+    Job Description: {job.job_description}
+    Type of Work : {job.type}
     Mention the Type of work in the Type Field in the Json Response.
     If the resume has any special research or National achievements (if Any) add it in the achievements field. Leave empty if there is No such achievements.
-    Give Rssult in this format :
+    If the resume contains any IEEE Research Paper Citation , mention it in the Response. 
+    At the end of the response Give a list of resumes that are likely to be selected for the job. Based on the Job Description
+    Give Result in this format :
 
-    ---------------------------------------------------------------------
+    
     Resume Number 
     Job Description Match : 
     Missing Keywords: []
     Profile Summary: 
     Achievements:  
     Type: 
+    IEEE Research: 
     ---------------------------------------------------------------------
+    At the end of the response Give a list of resumes that are likely to be selected for the job. Based on the Job Description
     Strictly Follow This format
     """
     convo.send_message(f"{context} Link:{url}, ")
     result = convo.last.text
 
+    send_email_to_shortlisted_client()
     
     return render(request, 'gemini/filter.html', {'url' : url,'result':result})
 
+
+
+    
 
 @login_required
 def filterlist(request):
@@ -302,3 +312,26 @@ def main(request):
         past, generated = initialize_session_state(request)
         context = {'past': past, 'generated': generated}
         return render(request, 'mystral/chat_history.html', context)
+
+
+##############################################################################
+
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+def send_email_to_shortlisted_client():
+    subject ="This email is Xircls Hiring Team  "
+    message = "You have been SHORTLISTED based on your resume "
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = ["francisgudinho1234@gmail.com"]
+    
+    
+    
+def send_email_to_rejected_client():
+    subject ="This email is Xircls Hiring Team  "
+    message = "You have been REJECTED based on your resume "
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = [" "]
+    
+    

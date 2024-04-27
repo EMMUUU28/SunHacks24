@@ -25,4 +25,5 @@ urlpatterns = [
     path('',include("mainapp.urls")),
     path('',include("filterResume.urls")),
     path('',include("authApp.urls")),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
