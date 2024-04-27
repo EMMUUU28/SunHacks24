@@ -108,7 +108,7 @@ def resumeassistant(request):
         return render(request,'resources/resume.html',{'response_text':final_result})
     return render(request,'resources/resume.html')
 
-
+@login_required
 def filtering(request):
 
     url = f'''https://emmubucket.s3.ap-south-1.amazonaws.com/resumes/Black+and+White+Simple+Business+School+Graduate+Corporate+Resume.pdf
@@ -197,7 +197,7 @@ WordPress, Bootstrap, Email Marketing, HTML&CSS
     return render(request, 'gemini/filter.html', {'url' : url,'result':result})
 
 
-
+@login_required
 def filterlist(request):
     company_names = JobOpening.objects.values_list('company_name', flat=True)
     if request.POST:

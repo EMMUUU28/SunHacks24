@@ -56,7 +56,7 @@
               </div>
               <nav class="iq-sidebar-menu">
                   <ul id="iq-sidebar-toggle" class="iq-menu">
-                       {% if request.user && role == "HR" %}
+                       {% if request.user.username == "emma1" %}
                        <li class=" ">
                           <a href="/addjob" >
                               <i class="las la-hdd"></i><span>Add Job</span>
@@ -71,7 +71,7 @@
                           <ul id="page-files" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                           </ul>
                        </li>
-                       {% if role == "HR" %}
+                       {% if request.user.username == "emma1" %}
                        <li class=" ">
                               <a href="/filterlist" class="">
                                   <i class="las la-stopwatch iq-arrow-left"></i><span>Resume Filter</span>
@@ -89,19 +89,19 @@
                           </ul>
                        </li>
 
-                       <li class=" ">
+                       <!-- <li class=" ">
                               <a href="/ar" class="">
                                   <i class="las la-trash-alt iq-arrow-left"></i><span>AR Assistant</span>
                               </a>
                           <ul id="page-delete" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                           </ul>
-                       </li>
+                       </li> -->
                        <li class=" ">
                         <a href="/profile">
                             <i class="las la-id-card"></i><span>Profile</span>
                         </a>
                         </li>
-                        {% if role == "HR" %}
+                        {% if request.user.username == "emma1" %}
                     <li class=" ">
                         <a href="/applicants" class="">
                             <i class="las la-stopwatch iq-arrow-left"></i><span>Applicants List</span>

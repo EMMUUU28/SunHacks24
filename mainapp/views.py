@@ -6,16 +6,22 @@ from django.core.files.storage import FileSystemStorage
 from .models import AppliedJob,JobOpening
 from authApp.models import *
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
 
 def index(request):
-    return render(request,"test.html")
+    return render(request,"home.html")
 
 def home(request):
-    user = request.user
-    profile = UserProfile.objects.get(user=user)
-    role=profile.role
-    return render(request,"profile/profile.html",{"role":role})
+    # user = request.user
+    # profile = UserProfile.objects.get(user=user)
+    
+    # print(profile.role)
+    # role=profile.role
+    return render(request,"auth/login.html")
 
+
+@login_required
 def applicants(request):
 
     company_names = JobOpening.objects.values_list('company_name', flat=True)
@@ -31,7 +37,7 @@ def applicants(request):
             return render(request, "hr/applicants.html", {"company":company_names,"appliedUsers":users_applied})
     return render(request, "hr/applicants.html", {"company":company_names})
 
-
+@login_required
 def applyjob(request):
     user = request.user
     company_names = JobOpening.objects.values_list('company_name', flat=True)
@@ -49,7 +55,7 @@ def applyjob(request):
 
 
 
-
+@login_required
 def addworkexp(request):
     company_names = JobOpening.objects.values_list('company_name', flat=True)
 
@@ -85,7 +91,7 @@ def addworkexp(request):
         return render(request,'user/apply.html',{"jobs":company_names})
     return render(request,'user/apply.html',{"jobs":company_names})
 
-# @login_required
+@login_required
 def addeducation(request):
     company_names = JobOpening.objects.values_list('company_name', flat=True)
 
@@ -114,7 +120,7 @@ def addeducation(request):
         return render(request,'user/apply.html',{"jobs":company_names})
     return render(request,'user/apply.html',{"jobs":company_names})
 
-# @login_required
+@login_required
 def addskills(request):
 
     company_names = JobOpening.objects.values_list('company_name', flat=True)
@@ -139,7 +145,7 @@ def addskills(request):
     return render(request,'user/apply.html',{"jobs":company_names})
 
 from .models import *
-
+@login_required
 def addJob(request):
     if request.method == 'POST':
         company_name = request.POST.get('cname')
@@ -173,14 +179,14 @@ def addJob(request):
     else:
         return render(request, 'hr/addJob.html')
     
-
+@login_required
 def listjob(request):
     job_openings = JobOpening.objects.all()  # Fetch all job openings from the database
     context = {'job_openings': job_openings}
     return render(request, 'hr/listjob.html', context)
 
 
-
+@login_required
 def profile(request):
     user = request.user
     education = Education.objects.filter(user=user)

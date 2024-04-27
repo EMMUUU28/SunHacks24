@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
  
 <h1>Applied Jobs</h1>
@@ -33,7 +34,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Members</th>
                         <th scope="col">Last Edit</th>
-                        <th scope="col">Size</th>
+                        {% comment %} <th scope="col">Business Card</th> {% endcomment %}
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -61,8 +62,8 @@
                                                         </div>
                         </td>
                         <td>{{ applied_job.user }}</td>
-                        <td>jan 21, 2020 me</td>
-                        <td>02 MB</td>
+                        <td>April 27, 2024 </td>
+                        <td></td>
                         <td>
                             <div class="dropdown">
                                 <span class="dropdown-toggle" id="dropdownMenuButton6" data-toggle="dropdown">
@@ -80,8 +81,15 @@
                     {% endfor %}
                 </tbody>
                 </table>
+                {% for applied_job in appliedUsers %}
+
+                <img src="{% static "bcard.jpg" %}" class="p-4" height="600" width="500" alt="">
+                
+                {% endfor %}
             </div>
         </div>
     </div>
 
 {% endblock content %}
+
+<img src="{% static "bcard.jpg" %}" height="300" width="300" alt="">
